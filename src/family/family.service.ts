@@ -24,7 +24,7 @@ export class FamilyService {
 
     async generateSerialNumber(): Promise<string> {
         const totalFamilies = await this.familyModel.countDocuments();
-        const newSerial = `FAM-${(totalFamilies + 1).toString().padStart(4, '0')}`;
+        const newSerial = `${process.env.SERIAL_NUMBER_PREFIX}-${(totalFamilies + 1).toString().padStart(4, '0')}`;
         return newSerial;
     }
 
@@ -84,7 +84,10 @@ export class FamilyService {
     }
 
     async createFamilyRequest(user: User, familySerialNumber: string): Promise<SuccesResponseType> {
-        const family = await this.familyModel.findOne({ serialNumber: familySerialNumber });
+        const formattedSerialNumber = `${process.env.SERIAL_NUMBER_PREFIX}-${familySerialNumber}`;
+        const cryptSerialNumber = encrypt(formattedSerialNumber)
+
+        const family = await this.familyModel.findOne({ serialNumber: cryptSerialNumber });
 
         if (!family) {
             throw new HttpException('Family not found', HttpStatus.NOT_FOUND);

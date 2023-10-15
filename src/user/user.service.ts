@@ -27,7 +27,7 @@ export class UserService {
 
     async update(userId: string, input: UpdateUserInputDto): Promise<GetUserModelDto | null> {
         const user = await this.userModel.findById(userId).exec() as User;
-        const { email, password, birthdate, phoneNumber } = input;
+        const { email, password, birthdate, phoneNumber, userName } = input;
 
         // Check if new email is taken by another user
         if (email) {
@@ -50,7 +50,8 @@ export class UserService {
             ...input,
             password: hashedPassword,
             age,
-            phoneNumber: cryptPhoneNumber
+            phoneNumber: cryptPhoneNumber,
+            $addToSet: { userName: userName }
         }, { new: true });
     }
 

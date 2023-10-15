@@ -61,7 +61,7 @@ export class UserController {
     @ApiParam({ name: 'familyId', type: String })
     @ApiResponse({
         status: 200,
-        description: 'retrieve user families',
+        description: 'retrieve family profile',
         type: GetUserProfileByFamilyDto
     })
     @UseInterceptors(new ZodInterceptor(GetUserProfileByFamilySchema))
