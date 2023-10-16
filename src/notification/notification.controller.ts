@@ -8,6 +8,8 @@ import { NotificationModel } from './notification.model';
 import { NotificationService } from 'notification/notification.service';
 import { UpdateNotificationStatusInputDto, UpdateNotificationStatusInputSchema } from 'notification/dto/inputs/update-status.dto';
 import { GetNotificationSchema } from 'notification/dto/models/get-notification.dto';
+import { GetUser } from 'decorators/user.decorators';
+import { User } from 'user/user.model';
 
 @Controller('notification')
 @ApiTags('notification')
@@ -39,6 +41,18 @@ export class NotificationController {
     @UseInterceptors(new ZodInterceptor(z.array(GetNotificationSchema)))
     getFamilyNotifications(@Param('familyId') familyId: string): Promise<NotificationModel[]> {
         return this.notificationService.getFamilyUnreadNotifications(familyId);
+    }
+
+    @UseGuards(AuthGuard())
+    @Get('/user')
+    @ApiResponse({
+        status: 200,
+        description: 'get user Notifications',
+        type: NotificationModel
+    })
+    @UseInterceptors(new ZodInterceptor(z.array(GetNotificationSchema)))
+    getUserNotifications(@GetUser() user: User): Promise<NotificationModel[]> {
+        return this.notificationService.getUserUnreadNotifications(user.id);
     }
 
 }

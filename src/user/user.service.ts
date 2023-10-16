@@ -25,8 +25,17 @@ export class UserService {
         return await this.userModel.findWithFamilyId(userId, familyId);
     }
 
+    async getBySerialNumber(serialNumber: string): Promise<GetUserModelDto | null> {
+        return await this.userModel.findOne({ serialNumber: serialNumber }).exec();
+    }
+
     async update(userId: string, input: UpdateUserInputDto): Promise<GetUserModelDto | null> {
-        const user = await this.userModel.findById(userId).exec() as User;
+        const user = await this.userModel.findById(userId).exec();
+
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+
         const { email, password, birthdate, phoneNumber, userName } = input;
 
         // Check if new email is taken by another user

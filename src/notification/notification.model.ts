@@ -19,13 +19,16 @@ export class NotificationModel extends Document {
     @ApiProperty({ description: 'Notification Type', enum: NotificationType })
     type!: NotificationType;
 
-    @ApiProperty({ description: 'Created By User ID', type: String })
-    createdBy!: string;
+    @ApiProperty({ description: 'Created By User ID', type: String, required: false })
+    createdBy?: string;
+
+    @ApiProperty({ description: 'Created By User ID', type: String, required: false })
+    createdFor?: string;
 
     @ApiProperty({ description: 'Associated Family ID', type: String })
     familyId!: string;
 
-    @ApiProperty({ description: 'Notification Status', enum: NotificationStatus })
+    @ApiProperty({ description: 'Notification Status', enum: NotificationStatus, required: false })
     status?: NotificationStatus;
 
     @ApiProperty({ description: 'Notification Read Status', type: Boolean })
@@ -39,7 +42,8 @@ export const NotificationSchema = new Schema({
         required: true,
         enum: Object.values(NotificationType)
     },
-    createdBy: { type: ObjectId, required: true },
+    createdBy: { type: ObjectId, required: false },
+    createdFor: { type: ObjectId, required: false },
     familyId: { type: ObjectId, required: true },
     status: {
         type: String,

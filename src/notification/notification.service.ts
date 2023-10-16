@@ -25,7 +25,7 @@ export class NotificationService {
         }
 
         if (updatedNotification.read && updatedNotification.type === NotificationType.FAMILY_REQUEST && updatedNotification.status === NotificationStatus.ACCEPTED) {
-            const userId = updatedNotification.createdBy;
+            const userId = updatedNotification.createdFor;
 
             // Update the user's familyIds
             await this.userModel.findByIdAndUpdate(userId, {
@@ -39,6 +39,13 @@ export class NotificationService {
     async getFamilyUnreadNotifications(familyId: string): Promise<NotificationModel[]> {
         return this.notificationModel.find({
             familyId: familyId,
+            read: false,
+        }).exec();
+    }
+
+    async getUserUnreadNotifications(userId: string): Promise<NotificationModel[]> {
+        return this.notificationModel.find({
+            createdFor: userId,
             read: false,
         }).exec();
     }

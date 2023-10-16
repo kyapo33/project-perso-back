@@ -42,6 +42,9 @@ export class User extends Document {
 
     @ApiProperty({ description: 'User Age', type: Number })
     age?: number;
+
+    @ApiProperty({ description: 'User Serial Number' })
+    serialNumber!: string;
 }
 
 const UserNameSchema = new Schema({
@@ -52,6 +55,7 @@ const UserNameSchema = new Schema({
 export const UserSchema = new Schema({
     userName: [UserNameSchema],
     email: { type: String, unique: true, required: true },
+    serialNumber: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     mobileToken: { type: String, required: false },
     familyIds: [{ type: Schema.Types.ObjectId, ref: 'Family', required: false }],

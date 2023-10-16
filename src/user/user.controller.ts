@@ -68,4 +68,17 @@ export class UserController {
     async getProfileByFamily(@Param('userId') userId: string, @Param('familyId') familyId: string): Promise<GetUserProfileByFamilyDto> {
         return this.userService.getProfileByFamilyId(userId, familyId);
     }
+
+    @UseGuards(AuthGuard())
+    @Get('/serial/:serialNumber')
+    @ApiParam({ name: 'serialNumber', type: String })
+    @ApiResponse({
+        status: 200,
+        description: 'retrieve user by serial number',
+        type: GetUserModelDto
+    })
+    @UseInterceptors(new ZodInterceptor(GetUserSchema))
+    async getBySerialNumber(@Param('serialNumber') serialNumber: string): Promise<GetUserModelDto | null> {
+        return this.userService.getBySerialNumber(serialNumber);
+    }
 }

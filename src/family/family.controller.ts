@@ -96,14 +96,15 @@ export class FamilyController {
     }
 
     @UseGuards(AuthGuard())
-    @Post('/request/:familySerialNumber')
-    @ApiParam({ name: 'familySerialNumber', type: String, description: 'ID of the family' })
+    @Post('/request/:familyId/user/:userId')
+    @ApiParam({ name: 'userId', type: String, description: 'ID of the user' })
+    @ApiParam({ name: 'familyId', type: String, description: 'ID of the family' })
     @ApiResponse({
         status: 200,
-        description: 'create a request to join a family',
+        description: 'create a request to invite a user to the family',
         type: [SuccesResponseType]
     })
-    async createFamilyRequest(@GetUser() user: User, @Param('familySerialNumber') familySerialNumber: string): Promise<SuccesResponseType> {
-        return this.familyService.createFamilyRequest(user, familySerialNumber);
+    async createFamilyRequest(@Param('familyId') familyId: string, @Param('userId') userId: string): Promise<SuccesResponseType> {
+        return this.familyService.createFamilyRequest(userId, familyId);
     }
 }

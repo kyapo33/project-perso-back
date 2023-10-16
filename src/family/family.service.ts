@@ -6,7 +6,6 @@ import { User } from 'user/user.model';
 import { Family } from 'family/family.model';
 import { CreateFamilyInputDto } from 'family/dto/inputs/create-family.dto';
 import { UpdateFamilyInputDto } from 'family/dto/inputs/update-family.dto';
-import { encrypt } from '../utils/crypt';
 import { GetFamilyModelDto } from 'family/dto/models/get-family.dto';
 import { SuccesResponseType } from 'common-schemas/success.dto';
 import { NotificationModel, NotificationStatus, NotificationType } from 'notification/notification.model';
@@ -22,20 +21,12 @@ export class FamilyService {
         private readonly notificationModel: Model<NotificationModel>,
     ) { }
 
-    async generateSerialNumber(): Promise<string> {
-        const totalFamilies = await this.familyModel.countDocuments();
-        const newSerial = `${process.env.SERIAL_NUMBER_PREFIX}-${(totalFamilies + 1).toString().padStart(4, '0')}`;
-        return newSerial;
-    }
-
     async getById(id: string): Promise<Family | null> {
         return await this.familyModel.findById(id).exec();
     }
 
     async create(user: User, createFamilyInputDto: CreateFamilyInputDto): Promise<Family> {
-        const serialNumber = await this.generateSerialNumber();
-        const cryptSerialNumber = encrypt(serialNumber)
-        const newFamily = new this.familyModel({ ...createFamilyInputDto, serialNumber: cryptSerialNumber });
+        const newFamily = new this.familyModel({ ...createFamilyInputDto });
         const savedFamily = await newFamily.save();
 
         // Update the user's familyIds
@@ -83,27 +74,25 @@ export class FamilyService {
         return this.familyModel.find({ _id: { $in: updatedUser.familyIds } }).exec();
     }
 
-    async createFamilyRequest(user: User, familySerialNumber: string): Promise<SuccesResponseType> {
-        const formattedSerialNumber = `${process.env.SERIAL_NUMBER_PREFIX}-${familySerialNumber}`;
-        const cryptSerialNumber = encrypt(formattedSerialNumber)
+    async createFamilyRequest(userId: string, familyId: string): Promise<SuccesResponseType> {
 
-        const family = await this.familyModel.findOne({ serialNumber: cryptSerialNumber });
+        const user = await this.userModel.findById(userId);
 
-        if (!family) {
-            throw new HttpException('Family not found', HttpStatus.NOT_FOUND);
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
 
         // Check if user is already a member
-        if (user && user.familyIds?.includes(family.id)) {
+        if (user && user.familyIds?.includes(familyId)) {
             throw new HttpException('User is already a member of the family', HttpStatus.BAD_REQUEST);
         }
 
         const newNotification = {
             type: NotificationType.FAMILY_REQUEST,
-            createdBy: user.id,
-            familyId: family.id,
+            createdFor: user.id,
+            familyId: familyId,
             status: NotificationStatus.WAITING,
-            read: false
+            read: false,
         }
 
         await this.notificationModel.create({

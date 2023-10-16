@@ -16,6 +16,7 @@ export const GetUserSchema = z.object({
     phoneNumber: z.string().optional(),
     birthdate: z.date().optional(),
     age: z.number().min(0, 'Age cannot be negative').optional(),
+    serialNumber: z.string().min(1, 'serial number cannot be empty'),
 });
 
 export class GetUserModelDto {
@@ -42,4 +43,7 @@ export class GetUserModelDto {
 
     @ApiProperty({ description: 'User Email' })
     email!: string;
+
+    @ApiProperty({ description: 'User Serial Number' })
+    serialNumber!: string;
 }

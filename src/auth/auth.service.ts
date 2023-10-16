@@ -37,6 +37,12 @@ export class AuthService {
     return age;
   }
 
+  async generateSerialNumber(): Promise<string> {
+    const totalUsers = await this.userModel.countDocuments();
+    const newSerial = `${process.env.SERIAL_NUMBER_PREFIX}-${(totalUsers + 1).toString().padStart(4, '0')}`;
+    return newSerial;
+  }
+
   async signUp(input: SignUpInputDto): Promise<AuthModel> {
     const { email, password, birthdate, phoneNumber } = input;
 
@@ -48,9 +54,11 @@ export class AuthService {
 
     const age = birthdate ? await this.calculateAge(new Date(birthdate)) : undefined;
 
-    const cryptPhoneNumber = phoneNumber ? encrypt(phoneNumber) : undefined
+    const cryptPhoneNumber = phoneNumber ? encrypt(phoneNumber) : undefined;
 
-    const user = await this.userModel.create({ ...input, password: hashedPassword, age, phoneNumber: cryptPhoneNumber });
+    const serialNumber = encrypt(await this.generateSerialNumber())
+
+    const user = await this.userModel.create({ ...input, password: hashedPassword, age, phoneNumber: cryptPhoneNumber, serialNumber });
 
     const token = this.jwtService.sign({ id: user.id });
 
