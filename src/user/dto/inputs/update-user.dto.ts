@@ -42,7 +42,7 @@ export const UpdateUserInputSchema = z.object({
 });
 
 export class UpdateUserInputDto {
-    @ApiProperty({ description: 'User Name By Family', type: [UserName] })
+    @ApiProperty({ description: 'User Name By Family', type: [UserName], required: false })
     userName?: UserName[];
 
     @ApiProperty({ description: 'User First Name', required: false })

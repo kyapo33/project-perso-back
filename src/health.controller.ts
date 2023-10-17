@@ -1,10 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
   MongooseHealthIndicator,
 } from '@nestjs/terminus';
-import * as mongoose from 'mongoose';
 
 @Controller('health')
 export class HealthController {
@@ -15,6 +15,7 @@ export class HealthController {
 
   @Get()
   @HealthCheck()
+  @ApiExcludeEndpoint()
   check() {
     return this.health.check([
       () =>

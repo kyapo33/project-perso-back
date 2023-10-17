@@ -1,0 +1,1095 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signUp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User creation payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "La liste des utilisateurs a été récupérée avec succès.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User login",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "operationId": "UserController_getUserProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "get the current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserModelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/update/{userId}": {
+      "patch": {
+        "operationId": "UserController_updateUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "update a user input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "update a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserModelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/family/{familyId}": {
+      "get": {
+        "operationId": "UserController_getFamilyUsers",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "retrieve user families",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetUserProfileByFamilyDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/profile/{userId}/family/{familyId}": {
+      "get": {
+        "operationId": "UserController_getProfileByFamily",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "retrieve family profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserProfileByFamilyDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/serial/{serialNumber}": {
+      "get": {
+        "operationId": "UserController_getBySerialNumber",
+        "parameters": [
+          {
+            "name": "serialNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "retrieve user by serial number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserModelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/files/upload": {
+      "post": {
+        "operationId": "CloudinaryController_uploadImage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "File to upload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Buffer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "uploaded image",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CloudinaryUploadResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "files"
+        ]
+      }
+    },
+    "/family/{familyId}": {
+      "get": {
+        "operationId": "FamilyController_getFamily",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get family by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFamilyModelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/family/create": {
+      "post": {
+        "operationId": "FamilyController_createFamily",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "create a family input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "create a family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFamilyModelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/family/update/{familyId}": {
+      "patch": {
+        "operationId": "FamilyController_updateFamily",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "update a family input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFamilyInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "update a family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFamilyModelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/family/delete/{familyId}": {
+      "delete": {
+        "operationId": "FamilyController_deleteFamily",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "delete a family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccesResponseType"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/family/user/families": {
+      "get": {
+        "operationId": "FamilyController_getUserFamilies",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "retrieve user families",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetFamilyModelDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/family/{familyId}/user/{userId}": {
+      "delete": {
+        "operationId": "FamilyController_removeUserFromFamily",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "description": "ID of the family",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Remove a user from a family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetFamilyModelDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/family/request/{familyId}/user/{userId}": {
+      "post": {
+        "operationId": "FamilyController_createFamilyRequest",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "description": "ID of the family",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "create a request to invite a user to the family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SuccesResponseType"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "family"
+        ]
+      }
+    },
+    "/notification/update/{notificationId}": {
+      "patch": {
+        "operationId": "NotificationController_updateNotificationStatus",
+        "parameters": [
+          {
+            "name": "notificationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "update notification status input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNotificationStatusInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "update notification status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "notification"
+        ]
+      }
+    },
+    "/notification/family/{familyId}": {
+      "get": {
+        "operationId": "NotificationController_getFamilyNotifications",
+        "parameters": [
+          {
+            "name": "familyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get family Notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "notification"
+        ]
+      }
+    },
+    "/notification/user": {
+      "get": {
+        "operationId": "NotificationController_getUserNotifications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "get user Notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "notification"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Mon API",
+    "description": "La description de mon API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "monapi",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "SignUpInputDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User Password"
+          },
+          "mobileToken": {
+            "type": "string",
+            "description": "User Password"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User First Name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User Last Name"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "User Phone Number"
+          },
+          "birthdate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "User Birthdate"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "AuthModel": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "LoginInputDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User Password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UserName": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "UserName value"
+          },
+          "familyId": {
+            "type": "object",
+            "description": "Family ID"
+          }
+        },
+        "required": [
+          "value",
+          "familyId"
+        ]
+      },
+      "GetUserModelDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
+          },
+          "userName": {
+            "description": "User Name By Family",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserName"
+            }
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User First Name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User Last Name"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "User Phone Number"
+          },
+          "birthdate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "User Birthdate"
+          },
+          "age": {
+            "type": "number",
+            "description": "User Age"
+          },
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "serialNumber": {
+            "type": "string",
+            "description": "User Serial Number"
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "description": "User profile picture url"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "serialNumber"
+        ]
+      },
+      "UpdateUserInputDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "User Name By Family",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserName"
+            }
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User First Name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User Last Name"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "User Phone Number"
+          },
+          "birthdate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "User Birthdate"
+          },
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User Password"
+          },
+          "mobileToken": {
+            "type": "string",
+            "description": "User Mobile Token"
+          },
+          "familyIds": {
+            "description": "User Families",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "profilePictureId": {
+            "type": "string",
+            "description": "User profile picture id"
+          }
+        }
+      },
+      "GetUserProfileByFamilyDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
+          },
+          "userName": {
+            "type": "string",
+            "description": "User Name By Family"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User First Name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User Last Name"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "User Phone Number"
+          },
+          "birthdate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "User Birthdate"
+          },
+          "age": {
+            "type": "number",
+            "description": "User Age"
+          },
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "serialNumber": {
+            "type": "string",
+            "description": "User Serial Number"
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "description": "User profile picture url"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "serialNumber"
+        ]
+      },
+      "Buffer": {
+        "type": "object",
+        "properties": {}
+      },
+      "CloudinaryUploadResponse": {
+        "type": "object",
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "description": "Asset ID"
+          },
+          "public_id": {
+            "type": "string",
+            "description": "Public ID"
+          },
+          "version": {
+            "type": "number",
+            "description": "Version"
+          },
+          "version_id": {
+            "type": "string",
+            "description": "Version ID"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Signature"
+          },
+          "width": {
+            "type": "number",
+            "description": "Width"
+          },
+          "height": {
+            "type": "number",
+            "description": "Height"
+          },
+          "format": {
+            "type": "string",
+            "description": "Format"
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "Resource type"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Creation date"
+          },
+          "tags": {
+            "description": "Tags",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bytes": {
+            "type": "number",
+            "description": "Size in bytes"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type"
+          },
+          "etag": {
+            "type": "string",
+            "description": "Etag"
+          },
+          "placeholder": {
+            "type": "boolean",
+            "description": "Placeholder"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL"
+          },
+          "secure_url": {
+            "type": "string",
+            "description": "Secure URL"
+          },
+          "folder": {
+            "type": "string",
+            "description": "Folder"
+          },
+          "original_filename": {
+            "type": "string",
+            "description": "Original filename"
+          },
+          "api_key": {
+            "type": "string",
+            "description": "API Key"
+          }
+        },
+        "required": [
+          "asset_id",
+          "public_id",
+          "version",
+          "version_id",
+          "signature",
+          "width",
+          "height",
+          "format",
+          "resource_type",
+          "created_at",
+          "tags",
+          "bytes",
+          "type",
+          "etag",
+          "placeholder",
+          "url",
+          "secure_url",
+          "folder",
+          "original_filename",
+          "api_key"
+        ]
+      },
+      "GetFamilyModelDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Family id"
+          },
+          "name": {
+            "type": "string",
+            "description": "Family Name"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "CreateFamilyInputDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Family Name"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UpdateFamilyInputDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Family Name"
+          }
+        }
+      },
+      "SuccesResponseType": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Success"
+          },
+          "message": {
+            "type": "string",
+            "description": "message"
+          }
+        },
+        "required": [
+          "success"
+        ]
+      },
+      "UpdateNotificationStatusInputDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Notification Status",
+            "enum": [
+              "ACCEPTED",
+              "DENIED",
+              "WAITING"
+            ]
+          },
+          "read": {
+            "type": "boolean",
+            "description": "Notification Read Status"
+          }
+        }
+      },
+      "NotificationModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "notification id"
+          },
+          "type": {
+            "type": "string",
+            "description": "Notification Type",
+            "enum": [
+              "FAMILY_REQUEST"
+            ]
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Created By User ID"
+          },
+          "createdFor": {
+            "type": "string",
+            "description": "Created By User ID"
+          },
+          "familyId": {
+            "type": "string",
+            "description": "Associated Family ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "Notification Status",
+            "enum": [
+              "ACCEPTED",
+              "DENIED",
+              "WAITING"
+            ]
+          },
+          "read": {
+            "type": "boolean",
+            "description": "Notification Read Status"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "familyId",
+          "read"
+        ]
+      }
+    }
+  }
+}

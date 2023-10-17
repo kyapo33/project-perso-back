@@ -18,7 +18,7 @@ export class GetUserProfileByFamilyDto {
     @ApiProperty({ description: 'User id' })
     id?: string;
 
-    @ApiProperty({ description: 'User Name By Family' })
+    @ApiProperty({ description: 'User Name By Family', required: false })
     userName?: string;
 
     @ApiProperty({ description: 'User First Name' })

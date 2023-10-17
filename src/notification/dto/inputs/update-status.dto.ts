@@ -9,7 +9,8 @@ export const UpdateNotificationStatusInputSchema = z.object({
 });
 
 export class UpdateNotificationStatusInputDto {
-    @ApiProperty({ description: 'Notification Status', enum: NotificationStatus })
+    @ApiProperty({ description: 'Notification Status', enum: NotificationStatus, required: false })
     status?: NotificationStatus;
+    @ApiProperty({ description: 'Notification Read Status', required: false })
     read?: boolean;
 }

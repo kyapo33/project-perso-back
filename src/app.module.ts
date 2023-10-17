@@ -8,6 +8,7 @@ import { UserModule } from 'user/user.module';
 import { FamilyModule } from 'family/family.module';
 import { NotificationModule } from 'notification/notification.module';
 import { CloudinaryModule } from 'cloudinary/cloudinary.module';
+import { SwaggerModule } from 'swagger/swagger.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { CloudinaryModule } from 'cloudinary/cloudinary.module';
     UserModule,
     FamilyModule,
     NotificationModule,
-    CloudinaryModule
+    CloudinaryModule,
+    SwaggerModule
   ],
   controllers: [HealthController],
 })
