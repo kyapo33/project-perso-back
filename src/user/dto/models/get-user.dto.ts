@@ -17,13 +17,14 @@ export const GetUserSchema = z.object({
     birthdate: z.date().optional(),
     age: z.number().min(0, 'Age cannot be negative').optional(),
     serialNumber: z.string().min(1, 'serial number cannot be empty'),
+    profilePictureUrl: z.string().optional()
 });
 
 export class GetUserModelDto {
     @ApiProperty({ description: 'User id' })
     id?: string;
 
-    @ApiProperty({ description: 'User Name By Family', type: [UserName] })
+    @ApiProperty({ description: 'User Name By Family', type: [UserName], required: false })
     userName?: UserName[];
 
     @ApiProperty({ description: 'User First Name' })
@@ -46,4 +47,7 @@ export class GetUserModelDto {
 
     @ApiProperty({ description: 'User Serial Number' })
     serialNumber!: string;
+
+    @ApiProperty({ description: 'User profile picture url', required: false })
+    profilePictureUrl?: string;
 }

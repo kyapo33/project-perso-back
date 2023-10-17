@@ -37,7 +37,8 @@ export const UpdateUserInputSchema = z.object({
             "Invalid token format"
         ).optional(),
 
-    familyIds: z.array(z.string()).optional()
+    familyIds: z.array(z.string()).optional(),
+    profilePictureId: z.string().optional()
 });
 
 export class UpdateUserInputDto {
@@ -67,4 +68,7 @@ export class UpdateUserInputDto {
 
     @ApiProperty({ description: 'User Families', required: false })
     familyIds?: string[];
+
+    @ApiProperty({ description: 'User profile picture id', required: false })
+    profilePictureId?: string;
 }

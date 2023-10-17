@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema, Document, Model, ObjectId } from 'mongoose';
 import { GetUserProfileByFamilyDto } from 'user/dto/models/get-user-profile-by-family';
+import { v2 as cloudinary } from 'cloudinary';
 
 export interface UserModel extends Model<User> {
     findWithFamilyId(userId: string, familyId: string): Promise<GetUserProfileByFamilyDto>;
@@ -12,11 +13,11 @@ export class UserName {
     value!: string;
 
     @ApiProperty({ description: 'Family ID' })
-    familyId!: string;
+    familyId!: ObjectId;
 }
 
 export class User extends Document {
-    @ApiProperty({ description: 'User Name By Family', type: [UserName] })
+    @ApiProperty({ description: 'User Name By Family' })
     userName?: UserName[];
 
     @ApiProperty({ description: 'User Email' })
@@ -37,7 +38,7 @@ export class User extends Document {
     @ApiProperty({ description: 'User Phone Number' })
     phoneNumber?: string;
 
-    @ApiProperty({ description: 'User Birthdate', type: Date })
+    @ApiProperty({ description: 'User Birthdate', type: Date, required: false })
     birthdate?: Date;
 
     @ApiProperty({ description: 'User Age', type: Number })
@@ -45,6 +46,9 @@ export class User extends Document {
 
     @ApiProperty({ description: 'User Serial Number' })
     serialNumber!: string;
+
+    @ApiProperty({ description: 'User profile picture id', required: false })
+    profilePictureId?: string;
 }
 
 const UserNameSchema = new Schema({
@@ -53,7 +57,11 @@ const UserNameSchema = new Schema({
 });
 
 export const UserSchema = new Schema({
-    userName: [UserNameSchema],
+    userName: {
+        type: [UserNameSchema],
+        required: false,
+        default: undefined
+    },
     email: { type: String, unique: true, required: true },
     serialNumber: { type: String, unique: true, required: true },
     password: { type: String, required: true },
@@ -66,27 +74,40 @@ export const UserSchema = new Schema({
     age: {
         type: Number,
         required: false,
-    }
+    },
+    profilePictureId: { type: String, required: false },
 });
 
 UserSchema.statics.findWithFamilyId = async function (userId: string, familyId: string) {
-    const doc = await this.findById(userId).lean().exec();
+    const doc = await this.findById(userId).lean().exec() as User;
 
     return {
         ...doc,
         id: doc._id.toString(),
-        userName: doc.userName?.find((uName: UserName) => uName.familyId.toString() === familyId)?.value ?? undefined
+        userName: doc.userName?.find((uName: UserName) => uName.familyId.toString() === familyId)?.value ?? undefined,
+        profilePictureUrl: doc.profilePictureId ? cloudinary.url(doc.profilePictureId) : undefined
     }
 };
 
 UserSchema.statics.findMultipleWithFamilyId = async function (familyId: string) {
     const docs = await this.find({ familyIds: familyId }).lean().exec();
 
-    const newDocs = await Promise.all(docs.map((doc: { userName: UserName[], _id: Schema.Types.ObjectId }) => ({
+    const newDocs = await Promise.all(docs.map((doc: User) => ({
         ...doc,
         id: doc._id.toString(),
-        userName: doc.userName?.find(uName => uName.familyId.toString() === familyId)?.value ?? undefined
+        userName: doc.userName?.find(uName => uName.familyId.toString() === familyId)?.value ?? undefined,
+        profilePictureUrl: doc.profilePictureId ? cloudinary.url(doc.profilePictureId) : undefined
     })))
 
     return newDocs;
 };
+
+UserSchema.virtual('profilePictureUrl').get(function () {
+    if (this.profilePictureId) {
+        return cloudinary.url(this.profilePictureId);
+    }
+    return undefined;
+});
+
+UserSchema.set('toJSON', { virtuals: true });
+UserSchema.set('toObject', { virtuals: true });

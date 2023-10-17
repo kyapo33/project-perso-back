@@ -3,8 +3,6 @@ import { customDateSchema } from 'common-schemas/date.schema';
 import { z } from 'zod';
 
 export const SignUpInputSchema = z.object({
-  userName: z.string().min(1, 'UserName cannot be empty').optional(),
-
   firstName: z.string().min(1, 'First name cannot be empty'),
 
   lastName: z.string().min(1, 'Last name cannot be empty'),
@@ -38,9 +36,6 @@ export const SignUpInputSchema = z.object({
 });
 
 export class SignUpInputDto {
-  @ApiProperty({ description: 'UserName', required: false })
-  userName?: string;
-
   @ApiProperty({ description: 'User Email' })
   email!: string;
 

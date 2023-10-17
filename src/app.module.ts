@@ -7,6 +7,7 @@ import { AuthModule } from 'auth/auth.module';
 import { UserModule } from 'user/user.module';
 import { FamilyModule } from 'family/family.module';
 import { NotificationModule } from 'notification/notification.module';
+import { CloudinaryModule } from 'cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -18,9 +19,9 @@ import { NotificationModule } from 'notification/notification.module';
     AuthModule,
     UserModule,
     FamilyModule,
-    NotificationModule
+    NotificationModule,
+    CloudinaryModule
   ],
   controllers: [HealthController],
-  providers: [],
 })
 export class AppModule { }

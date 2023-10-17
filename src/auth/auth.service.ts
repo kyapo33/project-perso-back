@@ -44,6 +44,7 @@ export class AuthService {
   }
 
   async signUp(input: SignUpInputDto): Promise<AuthModel> {
+    console.log(input)
     const { email, password, birthdate, phoneNumber } = input;
 
     if (await this.doesEmailExist(email)) {
@@ -56,7 +57,7 @@ export class AuthService {
 
     const cryptPhoneNumber = phoneNumber ? encrypt(phoneNumber) : undefined;
 
-    const serialNumber = encrypt(await this.generateSerialNumber())
+    const serialNumber = encrypt(await this.generateSerialNumber());
 
     const user = await this.userModel.create({ ...input, password: hashedPassword, age, phoneNumber: cryptPhoneNumber, serialNumber });
 
