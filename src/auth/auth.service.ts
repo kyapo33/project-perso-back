@@ -44,11 +44,10 @@ export class AuthService {
   }
 
   async signUp(input: SignUpInputDto): Promise<AuthModel> {
-    console.log(input)
     const { email, password, birthdate, phoneNumber } = input;
 
     if (await this.doesEmailExist(email)) {
-      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Cet utilisateur existe déjà', HttpStatus.BAD_REQUEST);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

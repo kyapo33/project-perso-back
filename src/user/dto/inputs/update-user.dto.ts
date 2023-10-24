@@ -27,8 +27,8 @@ export const UpdateUserInputSchema = z.object({
             "Password must contain at least one number"
         )
         .refine(
-            (password) => /^[A-Z]/.test(password),
-            "Password must start with an uppercase letter"
+            (password) => /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password),
+            'Password must contain at least one special character (!@#$%^&*()_+{}[]:;<>,.?~\\/-)'
         ).optional(),
 
     mobileToken: z.string()

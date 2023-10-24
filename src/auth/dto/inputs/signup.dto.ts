@@ -26,6 +26,10 @@ export const SignUpInputSchema = z.object({
     .refine(
       (password) => /^[A-Z]/.test(password),
       "Password must start with an uppercase letter"
+    )
+    .refine(
+      (password) => /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password),
+      'Password must contain at least one special character (!@#$%^&*()_+{}[]:;<>,.?~\\/-)'
     ),
 
   mobileToken: z.string()

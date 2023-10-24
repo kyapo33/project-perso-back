@@ -13,6 +13,10 @@ export const LoginInputSchema = z.object({
       (password) => /[A-Z]/.test(password),
       "Password must start with an uppercase letter"
     )
+    .refine(
+      (password) => /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password),
+      'Password must contain at least one special character (!@#$%^&*()_+{}[]:;<>,.?~\\/-)'
+    )
 });
 
 export class LoginInputDto {
